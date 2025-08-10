@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "5. ビュー：Razor の使い方";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>5. ビュー：Razor の使い方</h2>
+
+<p>
+    Viewは、Controllerから渡されたデータをもとにHTMLを生成し、ブラウザに表示する役割を持ちます。
+    ASP.NET MVCではRazor構文を使って、C#コードとHTMLを組み合わせて動的にページを作ります。
+</p>
+
+<h2>利点</h2>
+<ul>
+    <li>UIとロジックを分離できるため、保守性が高い</li>
+    <li>Razor構文で直感的にC#変数を埋め込める</li>
+    <li>部分ビューやレイアウトビューで再利用性を向上できる</li>
+</ul>
+
+<h2>基本的なRazor構文の例（表示用）</h2>
+
+<pre><code>@Html.Raw(System.Net.WebUtility.HtmlEncode(
+@"@model string
+<h1>こんにちは、@Model さん！</h1>"
+))</code></pre>
+
+<p>
+<h2>Controller 側の例（表示用）</h2>
+<pre><code>@Html.Raw(System.Net.WebUtility.HtmlEncode(
+@"// Controller 側の例
+public IActionResult ViewLesson()
+{
+    string userName = ""山田太郎"";
+    return View(""ViewLesson"", userName);
+}"
+))</code></pre>
+
+<h2>Razorでの条件分岐（表示用）</h2>
+<pre><code>@Html.Raw(System.Net.WebUtility.HtmlEncode(
+@"@model int
+@if (Model >= 18)
+{
+    <p>成人です。</p>
+}
+else
+{
+    <p>未成年です。</p>
+}"
+))</code></pre>
+
+<h2>Razorでのループ（表示用）</h2>
+<pre><code>@Html.Raw(System.Net.WebUtility.HtmlEncode(
+@"@model List<string>
+<ul>
+@foreach (var item in Model)
+{
+    @:<li>@item</li>
+}
+</ul>"
+))</code></pre>
+
+<p>
+ポイント：ページ内で実際に Razor を書いて動かしたい場合は **コードサンプルではなく別ファイルとして配置**し、`@@model` をファイル先頭に1回だけ置いてください。  
+表示目的（ドキュメント）であれば上のようにエンコードして出すのが安全です。
+</p>

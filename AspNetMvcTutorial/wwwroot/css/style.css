@@ -1,6 +1,6 @@
-ï»¿/* wwwroot/css/style.css */
+/* wwwroot/css/style.css */
 
-/* ãƒ™ãƒ¼ã‚¹è¨­å®š */
+/* ƒx[ƒXİ’è */
 html {
     font-size: 16px;
     line-height: 1.6;
@@ -14,7 +14,7 @@ body {
     padding: 0;
 }
 
-/* ãƒ˜ãƒƒãƒ€ãƒ¼ */
+/* ƒwƒbƒ_[ */
 header {
     background-color: #004578;
     color: #fff;
@@ -51,7 +51,7 @@ nav a {
         background-color: #006bb3;
     }
 
-/* ãƒ¡ã‚¤ãƒ³ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ */
+/* ƒƒCƒ“ƒRƒ“ƒeƒ“ƒc */
 main {
     max-width: 960px;
     margin: 2rem auto;
@@ -74,7 +74,7 @@ h3 {
     font-size: 1.2rem;
 }
 
-/* ã‚³ãƒ¼ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ */
+/* ƒR[ƒhƒuƒƒbƒN */
 pre {
     background-color: #272822;
     color: #f8f8f2;
@@ -90,7 +90,7 @@ code {
     font-family: Consolas, "Courier New", monospace;
 }
 
-/* å›³ã‚„ç”»åƒ */
+/* }‚â‰æ‘œ */
 figure {
     text-align: center;
     margin: 1.5rem 0;
@@ -103,7 +103,7 @@ figure {
         border-radius: 4px;
     }
 
-/* è¡¨ */
+/* •\ */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -121,7 +121,7 @@ th {
     background-color: #f2f2f2;
 }
 
-/* ãƒ•ãƒƒã‚¿ãƒ¼ */
+/* ƒtƒbƒ^[ */
 footer {
     text-align: center;
     padding: 1rem;
@@ -131,7 +131,7 @@ footer {
     border-top: 1px solid #ccc;
 }
 
-/* ãƒ¬ã‚¹ãƒãƒ³ã‚·ãƒ–å¯¾å¿œ */
+/* ƒŒƒXƒ|ƒ“ƒVƒu‘Î‰ */
 @media (max-width: 600px) {
     nav ul {
         flex-direction: column;

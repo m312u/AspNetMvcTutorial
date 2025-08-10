@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "2. MVCの基本構造と流れ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<article>
+    <h1>2. MVCの基本構造と流れ</h1>
+
+    <section>
+        <h2>流れ</h2>
+        <p>
+            ブラウザからのリクエストはまず <strong>ルーティング</strong> によってどのコントローラとアクションに割り当てるか決まり、
+            コントローラが Model を呼び出してデータを準備し、View に渡して HTML を返します。
+        </p>
+    </section>
+
+    <section>
+        <h2>ルーティングの例（Program.cs）</h2>
+        <pre><code>// Program.cs (.NET 6/7 の例)
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+app.UseStaticFiles();
+app.UseRouting();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Lesson}/{action=Introduction}/{id?}");
+
+app.Run();
+</code></pre>
+        <p>この設定では <code>/Lesson/Introduction</code> が既定のルートになります。</p>
+    </section>
+
+    <section>
+        <h2>MVC の構造図</h2>
+        <p>リクエスト → レスポンス の流れを図にした簡易 SVG を埋め込んでいます（ビュー内に直接 SVG を書くことも可能）。</p>
+
+        <!-- 簡易 SVG　MVCとは本来的に関係ない技術です。-->
+        <div style="text-align:center;">
+            <svg width="600" height="160" xmlns="http://www.w3.org/2000/svg" aria-label="MVC flow diagram">
+                <rect x="10" y="20" width="160" height="40" rx="6" fill="#e6f0ff" />
+                <text x="90" y="45" font-size="14" text-anchor="middle" fill="#003366">ブラウザ</text>
+
+                <line x1="170" y1="40" x2="230" y2="40" stroke="#777" stroke-width="2" marker-end="url(#arrow)" />
+                <rect x="230" y="10" width="110" height="60" rx="6" fill="#fff4e6" stroke="#e6a800" />
+                <text x="285" y="40" font-size="14" text-anchor="middle" fill="#663300">Controller</text>
+
+                <line x1="340" y1="40" x2="420" y2="40" stroke="#777" stroke-width="2" marker-end="url(#arrow)" />
+                <rect x="420" y="10" width="160" height="60" rx="6" fill="#e8ffe8" stroke="#2e8b57" />
+                <text x="500" y="40" font-size="14" text-anchor="middle" fill="#225522">View (Razor)</text>
+
+                <line x1="285" y1="70" x2="285" y2="110" stroke="#777" stroke-width="2" marker-end="url(#arrow)" />
+                <rect x="200" y="110" width="170" height="40" rx="6" fill="#fff0f6" stroke="#cc3366" />
+                <text x="285" y="135" font-size="14" text-anchor="middle" fill="#661133">Model / DB</text>
+
+                <defs>
+                    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+                        <path d="M0,0 L10,5 L0,10 z" fill="#777" />
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+
+        <p style="font-size:0.9rem;color:#555;">
+            @* 図の説明 *@
+            ブラウザ → Controller（処理）→ View（表示）／Controller が Model（DB）を呼んでデータを取得する構造。
+        </p>
+    </section>
+
+    <section>
+        <h2>実例：URL による Action 呼び出し</h2>
+        <pre><code>// Controllers/LessonController.cs 内のメソッド呼び出し（例）
+public IActionResult Routing()
+{
+    // 必要に応じて Model を準備して View に渡す
+    return View();
+}
+</code></pre>
+    </section>
+</article>

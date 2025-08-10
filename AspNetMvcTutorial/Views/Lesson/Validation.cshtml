@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "4. データ検証";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<article>
+    <h1>4. データ検証（Validation）</h1>
+
+    <section>
+        <h2>なぜ検証が必要か（初心者向け）</h2>
+        <p>
+            ユーザー入力は期待通りでない場合が多く、そのまま処理するとエラーやセキュリティ問題（SQLインジェクション、XSS 等）を引き起こします。
+            そのため入力値は必ず検証（バリデーション）する必要があります。
+        </p>
+    </section>
+
+    <section>
+        <h2>データ注釈（Data Annotation）による検証</h2>
+        <pre><code>using System.ComponentModel.DataAnnotations;
+
+public class RegisterUser
+{
+    [Required]
+    [StringLength(50)]
+    public string Name { get; set; }
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+}
+</code></pre>
+        <p>このモデルを受け取るアクションで <code>ModelState.IsValid</code> をチェックします。</p>
+    </section>
+
+    <section>
+        <h2>クライアント側とサーバ側の検証の違い（なぜ両方必要か）</h2>
+        <ul>
+            <li><strong>クライアント側検証：</strong>即時フィードバックにより UX が良くなる（JavaScript による入力チェック）。ただし、クライアント検証はユーザーが無効化したり、直接 HTTP リクエストを送れるため信用できない。</li>
+            <li><strong>サーバ側検証：</strong>最終的な信頼できる検証。必須。バックエンドで検証することでアプリケーションの安全性とデータ整合性を担保する。</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>検証フローの実例</h2>
+        <pre><code>[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Register(RegisterUser input)
+{
+    if (!ModelState.IsValid)
+    {
+        // エラー詳細を View に渡して再表示
+        return View(input);
+    }
+
+    // 正常処理（DB保存等）
+    return RedirectToAction("Success");
+}
+</code></pre>
+    </section>
+</article>

@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "1. ASP.NET MVCとは";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<article>
+    <h1>1. ASP.NET MVCとは</h1>
+
+    <section>
+        <h2>概要（初心者向け）</h2>
+        <p>
+            ASP.NET MVC は Microsoft が提供する Web アプリケーションフレームワークの一つで、<br />
+            Model（データとビジネスロジック）<br />
+            View（画面）<br />
+            Controller（処理）<br />
+            の3つに役割の分割を行っています。<br />
+            この分離により、保守性・テスト容易性が向上します。<br />
+            <br />
+            具体的に保守性の向上とは、<strong>コードの変更が他の部分に影響しにくくなること</strong>です。<br />
+            例として見た目に変更を加えようとしたときそのページのviewを変更すればよく、<br />
+            その変更が別のページの見た目にも、そのページのロジックにも影響することがない。などです。
+
+        </p>
+    </section>
+
+    <section>
+        <h2>実行可能な最小例（ローカル開発で動かせる）</h2>
+        <p>以下は最小の Home のアクション例です。</p>
+        <pre><code>// Controllers/HomeController.cs (例)
+using Microsoft.AspNetCore.Mvc;
+
+namespace AspNetMvcTutorial.Controllers
+{
+    public class HomeController : Controller
+    {
+        public IActionResult Index()
+        {
+            // シンプルに文字列を返す例
+            return Content("Hello, ASP.NET MVCをここから始めよう");
+        }
+    }
+}
+</code></pre>
+    </section>
+</article>

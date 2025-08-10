@@ -1,0 +1,133 @@
+﻿@{
+    ViewData["Title"] = "3. コントローラと属性の活用";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<article>
+    <h1>3. コントローラと属性の活用</h1>
+
+    <section>
+        <h2>コントローラの役割</h2>
+        <p>
+            コントローラは、MVCの中で「リクエストの入口」となる部分です。ユーザーからのHTTPリクエスト（URLアクセスやフォーム送信など）を受け取り、ビジネスロジック（Model層）を呼び出し、その結果をViewに渡して画面表示を制御します。
+            具体的には、リクエストの内容を検証（バリデーション）、適切な処理を選択し、最終的にレスポンスを返す役割を持ちます。
+        </p>
+    </section>
+
+    <section>
+        <h2>HTTPメソッド属性（Actionメソッドに付与する属性）</h2>
+        <p>
+            コントローラのアクションメソッドには、HTTPメソッドを限定する属性を付けることで、意図しないアクセスを防ぎやすくなります。
+            代表的な属性は以下の通りです。
+        </p>
+
+        <ul>
+            <li><code>[HttpGet]</code>：GETリクエストにのみ応答。ページ表示やデータ取得に使います。</li>
+            <li><code>[HttpPost]</code>：POSTリクエストにのみ応答。フォーム送信などデータ作成・更新に使います。</li>
+            <li><code>[HttpPut]</code>、<code>[HttpDelete]</code>：REST APIでのPUT（更新）、DELETE（削除）に対応します。</li>
+            <li><code>[ValidateAntiForgeryToken]</code>：フォームのCSRF（クロスサイトリクエストフォージェリ）対策のトークンを検証します。</li>
+            <li><code>[AllowAnonymous]</code>：認証なしでアクセスを許可する</li>
+            <li><code>[Authorize]</code>：認証・認可が必要なアクションに指定</li>
+            <li><code>[Produces]</code>：レスポンスのContent-Typeを指定</li>
+        </ul>
+
+        <h3>[HttpPost]の具体例とポイント</h3>
+        <pre><code>// Controllers/ExampleController.cs (抜粋)
+[HttpGet]
+public IActionResult Create()
+{
+    // 空のフォームを返す
+    return View();
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Create(Product model)
+{
+    if (!ModelState.IsValid)
+    {
+        // バリデーションエラーがあれば入力画面に戻す
+        return View(model);
+    }
+
+    // DB保存処理（Model層やRepositoryに委譲）
+    // repository.Add(model);
+
+    return RedirectToAction("Index");
+}
+</code></pre>
+        <p><strong>ポイント：</strong>HTTPメソッド属性は、REST原則に則り、「取得(GET)は副作用なし」「変更(POST/PUT/DELETE)は状態変更あり」と区別して使用します。</p>
+    </section>
+
+    <section>
+        <h2>モデルバリデーションに使うデータ注釈（Data Annotations）属性</h2>
+        <p>
+            ASP.NET Core MVCでは、フォームの入力内容検証に <code>System.ComponentModel.DataAnnotations</code> 名前空間の属性を使います。
+            これにより、エンティティ（モデルクラス）のプロパティ単位で必須チェックや文字数制限、数値範囲などを簡単に定義でき、ModelStateの検証が自動化されます。
+        </p>
+
+        <ul>
+            <li><code>[Required]</code>：必須入力を指定</li>
+            <li><code>[StringLength(max, MinimumLength = min)]</code>：文字列長の上限・下限を指定</li>
+            <li><code>[Range(min, max)]</code>：数値の範囲制限</li>
+            <li><code>[EmailAddress]</code>：メールアドレス形式チェック</li>
+            <li><code>[RegularExpression("正規表現")</code>]：正規表現による入力制限</li>
+            <li><code>[Compare("OtherPropertyName")]</code>：2つの入力値の比較検証（例：パスワードと確認用パスワード）</li>
+        </ul>
+
+        <h3>例：Productモデルに対する属性付与</h3>
+        <pre><code>using System.ComponentModel.DataAnnotations;
+
+public class Product
+{
+    public int Id { get; set; }
+
+    [Required(ErrorMessage = "商品名は必須です")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "商品名は3文字以上、100文字以下で入力してください")]
+    public string Name { get; set; }
+
+    [Range(0.01, 10000, ErrorMessage = "価格は0.01以上、10000以下で入力してください")]
+    public decimal Price { get; set; }
+
+    [Required]
+    [DataType(DataType.Date)]
+    public DateTime ReleaseDate { get; set; }
+}
+</code></pre>
+
+        <p>
+            このように属性を付与すると、フォーム送信時に自動的に入力値が検証され、エラーがあれば <code>ModelState.IsValid</code> が false になります。
+            これにより、コントローラ側での手動チェックを減らせます。
+        </p>
+    </section>
+
+    <section>
+        <h2>Entity Frameworkと属性の関係</h2>
+        <p>
+            Entity Framework（EF）では、モデルクラスにデータ注釈属性を付けることで、DBテーブルのスキーマ生成（マイグレーション）にも影響します。
+            例えば <code>[Required]</code> はNOT NULL制約を付与し、<code>[StringLength]</code> はVARCHARの最大長を指定します。
+        </p>
+
+        <ul>
+            <li><code>[Key]</code>：主キーを指定</li>
+            <li><code>[Required]</code>：NULL不可（NOT NULL制約）</li>
+            <li><code>[StringLength]</code>：文字列型の最大長を設定</li>
+            <li><code>[MaxLength]</code>：DBカラムの最大長を指定</li>
+            <li><code>[ForeignKey("他のプロパティ名")</code>]：外部キーを指定</li>
+        </ul>
+
+        <p>
+            つまり、同じ属性でフォームバリデーションとDBスキーマの整合性を保てるため、開発効率と保守性が高まります。
+        </p>
+    </section>
+
+    <section>
+        <h2>その他、よく使う属性</h2>
+        <ul>
+            <li><code>[Bind]</code>：モデルバインディング時にバインド対象のプロパティを限定</li>
+            <li><code>[FromBody]</code>、<code>[FromQuery]</code>、<code>[FromRoute]</code>：パラメータのバインディング元を指定</li>
+            <li><code>[TempData]</code>：一時的にデータを保持する</li>
+            <li><code>[ResponseCache]</code>：レスポンスのキャッシュ設定</li>
+        </ul>
+    </section>
+</article>

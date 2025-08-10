@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "7. Entity Framework（マイグレーション・最適化）";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<article>
+    <h1>6. Entity Framework（EF Core）</h1>
+
+    <section>
+        <h2>目的</h2>
+        <p>
+            EF Core は .NET 向けの ORM（Object-Relational Mapper）で、C# のクラスとデータベースのテーブルを対応させてデータ操作を簡単にします。
+        </p>
+    </section>
+
+    <section>
+        <h2>基本的な流れ（DbContext と Entity）</h2>
+        <pre><code>public class AppDbContext : DbContext
+{
+    public DbSet&lt;TodoItem&gt; TodoItems { get; set; }
+
+    public AppDbContext(DbContextOptions&lt;AppDbContext&gt; options)
+        : base(options)
+}
+
+public class TodoItem
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public bool IsDone { get; set; }
+}
+</code></pre>
+    </section>
+
+    <section>
+        <h2>マイグレーション（データベースの設計変更を管理する仕組み）</h2>
+            マイグレーションは、データベースの設計変更を「履歴」として保存し、みんなで安全に共有・管理できる仕組みです。
+            これにより、チームで作業するときに変更内容がバラバラにならず、間違いを防げます。また、新しい環境への反映や過去の状態への戻しも簡単になります。
+        </p>
+    </section>
+
+</article>
